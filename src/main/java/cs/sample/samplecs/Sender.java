@@ -17,9 +17,9 @@ public class Sender {
 	@Value(value = "${kafka.topic}")
 	private String topic;
 
-	public void sendMessage(String msg) {
+	public void sendMessage(String key, String message) {
 		logger.info("Sending");
-		kafkaTemplate.send(topic, msg);
+		kafkaTemplate.send(topic, key, message);
 		logger.info("sent");
 	}
 }
