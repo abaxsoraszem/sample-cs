@@ -13,13 +13,16 @@ public class Sender {
 	Logger logger = LoggerFactory.getLogger(getClass());
 	
 	@Autowired
-	private KafkaTemplate<String, String> kafkaTemplate;
+	private KafkaTemplate<String, Message> kafkaTemplate;
 	@Value(value = "${kafka.topic}")
 	private String topic;
 
-	public void sendMessage(String key, String message) {
+	public void sendMessage(String key, String payload) {
 		logger.info("Sending");
-		kafkaTemplate.send(topic, key, message);
+		Message message = new Message();
+		message.setPayload(payload);
+		message.setTimestamp(System.currentTimeMillis());
+		kafkaTemplate.send(topic,null, System.currentTimeMillis(), key, message);
 		logger.info("sent");
 	}
 }

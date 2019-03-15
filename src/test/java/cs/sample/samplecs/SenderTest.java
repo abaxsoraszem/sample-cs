@@ -29,7 +29,7 @@ public class SenderTest {
 		sender.sendMessage("message1", "a");
 		sender.sendMessage("message2", "b");
 		
-		Assert.assertTrue("Not Received on time", receiver.allRevceived(5000));
+		Assert.assertTrue("Not Received on time", receiver.allRevceived(50000));
 	}
 
 }

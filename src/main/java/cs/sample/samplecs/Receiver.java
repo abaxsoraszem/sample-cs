@@ -28,8 +28,7 @@ public class Receiver {
 	@KafkaListener(topics = "${kafka.topic}")
 	public void listen(
 			@Header(KafkaHeaders.RECEIVED_MESSAGE_KEY) String key, 
-			@Header(KafkaHeaders.TIMESTAMP) Object timestamp,
-			@Payload String message) {
+			@Payload Message message) {
 		logger.info("Received Message in group foo: " + key);
 		expectedMessages.remove(key);
 		
