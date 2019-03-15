@@ -2,6 +2,7 @@ package cs.sample.samplecs;
 
 import java.time.LocalDateTime;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,18 +20,22 @@ public class SenderTest {
 	@Autowired
 	Receiver receiver;
 
+	int msgSizeBytes = 1024;
 	int msgcount = 100;
 
 	@Test
 	public void testSendMessage() {
+		
 
 		for (int i = 0; i < msgcount; i++) {
+
+			String payload = RandomStringUtils.random(msgSizeBytes);
 
 			String key = "Msg" + i;
 
 			receiver.expect(key);
 
-			sender.sendMessage(key, "a");
+			sender.sendMessage(key, payload);
 		}
 
 		Assert.assertTrue("Not Received on time", receiver.allRevceived(50000));
