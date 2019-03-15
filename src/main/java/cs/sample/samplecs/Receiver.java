@@ -24,6 +24,9 @@ public class Receiver {
 	
 	Set<String> expectedMessages = Collections.synchronizedSet(new HashSet<>());
 	
+	long maxdelay = Long.MIN_VALUE;
+	long avgdelay = 0;
+	long msgCount = 0;
 	
 	@KafkaListener(topics = "${kafka.topic}")
 	public void listen(
@@ -32,6 +35,12 @@ public class Receiver {
 		logger.info("Received Message in group foo: " + key);
 		expectedMessages.remove(key);
 		
+		long delay = System.currentTimeMillis() - message.getTimestamp();
+		
+		maxdelay = Math.max(maxdelay, delay);
+		avgdelay = (avgdelay * msgCount + delay) / (msgCount + 1);
+		msgCount++;
+		
 	}
 
 
@@ -39,6 +48,13 @@ public class Receiver {
 	public void expect(String key) {
 		expectedMessages.add(key);
 		
+		
+	}
+	
+	public void printStat() {
+		System.out.println("Count: " + msgCount);
+		System.out.println("Avg: " + avgdelay);
+		System.out.println("Max: " + maxdelay);
 		
 	}
 
